@@ -1,11 +1,17 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%@ taglib prefix="c"
-uri="http://java.sun.com/jsp/jstl/core" %>
+           uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
 
     <title>Patient Dashboard</title>
 
@@ -169,7 +175,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 
                     </p>
 
-                    <a href="${pageContext.request.contextPath}/patient/profile"
+                    <a href="${pageContext.request.contextPath}/patients/${patient.id}"
                        class="btn btn-warning text-white">
 
                         Profile
@@ -196,57 +202,131 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 
             </h4>
 
-            <table class="table table-bordered table-hover">
+            <div class="table-responsive">
 
-                <thead class="table-primary">
+                <table class="table table-bordered table-hover align-middle">
 
-                <tr>
-
-                    <th>ID</th>
-                    <th>Doctor</th>
-                    <th>Date</th>
-                    <th>Status</th>
-
-                </tr>
-
-                </thead>
-
-                <tbody>
-
-                <c:forEach items="${appointments}"
-                           var="appointment">
+                    <thead class="table-primary">
 
                     <tr>
 
-                        <td>
-                            ${appointment.id}
-                        </td>
+                        <th>ID</th>
 
-                        <td>
-                            ${appointment.doctor.name}
-                        </td>
+                        <th>Doctor</th>
 
-                        <td>
-                            ${appointment.date}
-                        </td>
+                        <th>Date</th>
 
-                        <td>
+                        <th>Time</th>
 
-                            <span class="badge bg-success">
+                        <th>Reason</th>
 
-                                Scheduled
-
-                            </span>
-
-                        </td>
+                        <th>Status</th>
 
                     </tr>
 
-                </c:forEach>
+                    </thead>
 
-                </tbody>
+                    <tbody>
 
-            </table>
+                    <!-- NO APPOINTMENTS -->
+
+                    <c:if test="${empty appointments}">
+
+                        <tr>
+
+                            <td colspan="6"
+                                class="text-center text-muted">
+
+                                No appointments found.
+
+                            </td>
+
+                        </tr>
+
+                    </c:if>
+
+                    <!-- APPOINTMENT LOOP -->
+
+                    <c:forEach items="${appointments}"
+                               var="appointment">
+
+                        <tr>
+
+                            <!-- ID -->
+
+                            <td>
+
+                                ${appointment.id}
+
+                            </td>
+
+                            <!-- DOCTOR -->
+
+                            <td>
+
+                                <c:choose>
+
+                                    <c:when test="${appointment.doctor != null}">
+
+                                        ${appointment.doctor.name}
+
+                                    </c:when>
+
+                                    <c:otherwise>
+
+                                        Not Assigned
+
+                                    </c:otherwise>
+
+                                </c:choose>
+
+                            </td>
+
+                            <!-- DATE -->
+
+                            <td>
+
+                                ${appointment.appointmentDate}
+
+                            </td>
+
+                            <!-- TIME -->
+
+                            <td>
+
+                                ${appointment.appointmentTime}
+
+                            </td>
+
+                            <!-- REASON -->
+
+                            <td>
+
+                                ${appointment.reason}
+
+                            </td>
+
+                            <!-- STATUS -->
+
+                            <td>
+
+                                <span class="badge bg-success">
+
+                                    Scheduled
+
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+                    </c:forEach>
+
+                    </tbody>
+
+                </table>
+
+            </div>
 
         </div>
 
@@ -259,4 +339,5 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>

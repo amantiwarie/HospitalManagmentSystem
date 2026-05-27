@@ -24,6 +24,21 @@ public class AppointmentService {
 
         return appointmentRepository.findAll();
     }
+    @Transactional
+    public List<Appointment> getAppointmentsByPatientEmail(
+            String email){
+
+        return appointmentRepository
+                .findByPatient_Email(email);
+    }
+
+    @Transactional
+    public List<Appointment> getAppointmentsByDoctorEmail(
+            String email){
+
+        return appointmentRepository
+                .findByDoctor_Email(email);
+    }
 @Transactional
     public Appointment saveAppointment(
             Appointment appointment) {

@@ -24,7 +24,7 @@ public class Doctor {
     @ManyToOne
     private Department department;
 
-    @OneToMany
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<org.app.models.Appointment> appointments;
 
 

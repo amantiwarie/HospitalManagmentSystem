@@ -1,9 +1,11 @@
 package org.app.Controllers;
 
+import org.app.Services.AppointmentService;
 import org.app.Services.DoctorService;
 import org.app.models.Doctor;
 import org.app.models.Patient;
 import org.app.models.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +18,12 @@ import java.util.Optional;
 public class DoctorController {
 
     private final DoctorService doctorService;
+    private  final AppointmentService appointmentService;
 
-    public DoctorController(DoctorService doctorService){
+    @Autowired
+    public DoctorController(DoctorService doctorService,AppointmentService appointmentService){
         this.doctorService=doctorService;
+        this.appointmentService=appointmentService;
     }
 
     @GetMapping
@@ -64,5 +69,29 @@ public class DoctorController {
         return "doctor-details";
     }
 
+    @GetMapping("/dashboard")
+    public String doctorDashboard(
+            HttpSession session,
+            Model model){
+
+        User user =
+                (User) session.getAttribute(
+                        "loggedInUser");
+
+        if(user == null){
+
+            return "redirect:/login";
+        }
+
+        model.addAttribute(
+                "appointments",
+
+                appointmentService
+                        .getAppointmentsByDoctorEmail(
+                                user.getEmail())
+        );
+
+        return "DoctorDashboard";
+    }
 
 }

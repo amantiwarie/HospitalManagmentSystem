@@ -157,7 +157,7 @@
         HMS Admin
     </div>
 
-    <a href="${pageContext.request.contextPath}/dashboard" class="active">
+    <a href="${pageContext.request.contextPath}/admin/dashboard" class="active">
         <i class="bi bi-speedometer2"></i> Dashboard
     </a>
 

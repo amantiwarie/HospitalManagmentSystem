@@ -1,13 +1,20 @@
 package org.app.Controllers;
 
+import org.app.Services.AppointmentService;
 import org.app.Services.PatientService;
 import org.app.Services.UserService;
+
 import org.app.dto.RegisterDto;
+
 import org.app.models.Patient;
 import org.app.models.User;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+
 import org.springframework.ui.Model;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,16 +25,26 @@ import javax.servlet.http.HttpSession;
 public class AuthController {
 
     private final UserService userService;
+
     private final PatientService patientService;
 
+    private final AppointmentService appointmentService;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
     @Autowired
     public AuthController(
-            UserService userService,PatientService patientService){
+            UserService userService,
+            PatientService patientService,
+            AppointmentService appointmentService){
 
         this.userService = userService;
-        this.patientService=patientService;
+
+        this.patientService = patientService;
+
+        this.appointmentService = appointmentService;
     }
 
+    // PATIENT DASHBOARD
     @GetMapping("/patient/dashboard")
     public String patientDashboard(
             HttpSession session,
@@ -37,40 +54,68 @@ public class AuthController {
 
         User user =
                 (User) session.getAttribute(
-                        "loggedInUser"
-                );
+                        "loggedInUser");
 
         if(user == null){
 
             return "redirect:/login";
         }
 
-        // CHECK ROLE
+        // ROLE CHECK
 
-        if(!user.getRole().equals("PATIENT")){
+        if(!user.getRole()
+                .equalsIgnoreCase("PATIENT")){
 
             return "redirect:/login";
         }
 
+        // FETCH PATIENT USING EMAIL
+
+        Patient patient =
+                patientService.getPatientByEmail(
+                        user.getEmail());
+
+        // SEND USER
+
         model.addAttribute(
                 "user",
-                user
+                user);
+
+        // SEND PATIENT
+
+        model.addAttribute(
+                "patient",
+                patient);
+
+        // SEND APPOINTMENTS
+
+        model.addAttribute(
+                "appointments",
+
+                appointmentService
+                        .getAppointmentsByPatientEmail(
+                                user.getEmail())
         );
 
         return "patientDashboard";
     }
+
+    // REGISTER PAGE
 
     @GetMapping("/register")
     public String registerPage(){
 
         return "register";
     }
+
+    // REGISTER USER
+
     @PostMapping("/register")
     public String register(
             @ModelAttribute RegisterDto registerDto,
             Model model) {
 
-        // BACKEND VALIDATION
+        // CHECK DUPLICATE EMAIL
 
         User existingUser =
                 userService.findBYEmail(
@@ -78,8 +123,10 @@ public class AuthController {
 
         if(existingUser != null){
 
-            model.addAttribute("error",
-                    "Email already registered!");
+            model.addAttribute(
+                    "error",
+                    "Email already registered!"
+            );
 
             return "register";
         }
@@ -88,9 +135,11 @@ public class AuthController {
 
         Patient patient = new Patient();
 
-        patient.setName(registerDto.getName());
+        patient.setName(
+                registerDto.getName());
 
-        patient.setEmail(registerDto.getEmail());
+        patient.setEmail(
+                registerDto.getEmail());
 
         patientService.savePatient(patient);
 
@@ -98,11 +147,15 @@ public class AuthController {
 
         User user = new User();
 
-        user.setName(registerDto.getName());
+        user.setName(
+                registerDto.getName());
 
-        user.setEmail(registerDto.getEmail());
+        user.setEmail(
+                registerDto.getEmail());
 
-        user.setPassword(registerDto.getPassword());
+        String encryptedPassword = passwordEncoder.encode(registerDto.getPassword());
+
+        user.setPassword(encryptedPassword);
 
         user.setRole("PATIENT");
 

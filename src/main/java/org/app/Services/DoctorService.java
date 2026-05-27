@@ -38,5 +38,12 @@ public class DoctorService {
         existingDoctor.setEmail(newDoctor.getEmail());
         return doctorRepository.save(existingDoctor);
     }
+    public Doctor getDoctorById(Long id){
+
+        return doctorRepository
+                .findById(id)
+                .orElse(null);
+    }
+
 
 }

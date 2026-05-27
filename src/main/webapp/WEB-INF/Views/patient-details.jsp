@@ -1,190 +1,200 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
+<%@ taglib prefix="c"
+           uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html>
+
 <head>
 
-    <title>Patient Profile</title>
+    <title>Patient Details</title>
 
-    <style>
-
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family: Arial, sans-serif;
-        }
-
-        body{
-            background:linear-gradient(to right,#e3f2fd,#f5f5f5);
-            min-height:100vh;
-            display:flex;
-            justify-content:center;
-            align-items:center;
-        }
-
-        .profile-card{
-            width:500px;
-            background:white;
-            border-radius:15px;
-            overflow:hidden;
-            box-shadow:0 4px 20px rgba(0,0,0,0.15);
-        }
-
-        .header{
-            background:#1976d2;
-            color:white;
-            padding:30px;
-            text-align:center;
-        }
-
-        .header h1{
-            font-size:32px;
-            margin-bottom:10px;
-        }
-
-        .header p{
-            font-size:16px;
-            opacity:0.9;
-        }
-
-        .content{
-            padding:30px;
-        }
-
-        .info-box{
-            background:#f8f9fa;
-            padding:15px 20px;
-            border-radius:10px;
-            margin-bottom:20px;
-            border-left:5px solid #1976d2;
-        }
-
-        .label{
-            font-size:14px;
-            color:#777;
-            margin-bottom:5px;
-        }
-
-        .value{
-            font-size:20px;
-            color:#222;
-            font-weight:bold;
-        }
-
-        .btn-container{
-            text-align:center;
-            margin-top:30px;
-        }
-
-        .btn{
-            text-decoration:none;
-            background:#1976d2;
-            color:white;
-            padding:12px 25px;
-            border-radius:8px;
-            transition:0.3s;
-        }
-
-        .btn:hover{
-            background:#125ea7;
-        }
-        .home-btn{
-            background:#28a745;
-            margin-left:15px;
-        }
-
-        .home-btn:hover{
-            background:#1f7d34;
-        }
-
-    </style>
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+            rel="stylesheet">
 
 </head>
 
-<body>
+<body class="bg-light">
 
-<div class="profile-card">
+<div class="container mt-5">
 
-    <div class="header">
+    <div class="card shadow-lg border-0">
 
-        <h1>Patient Profile</h1>
+        <div class="card-header bg-primary text-white">
 
-        <p>
-            Detailed Information of Patient
-        </p>
+            <h2 class="mb-0">
 
-    </div>
+                Patient Details
 
-    <div class="content">
-
-        <div class="info-box">
-
-            <div class="label">
-                Patient ID
-            </div>
-
-            <div class="value">
-                ${patient.id}
-            </div>
+            </h2>
 
         </div>
 
-        <div class="info-box">
+        <div class="card-body">
 
-            <div class="label">
-                Full Name
-            </div>
+            <!-- UPDATE FORM -->
 
-            <div class="value">
-                ${patient.name}
-            </div>
+            <form action="${pageContext.request.contextPath}/patients/update"
+                  method="post">
+
+                <!-- ID -->
+
+                <input type="hidden"
+                       name="id"
+                       value="${patient.id}">
+
+                <div class="row">
+
+                    <!-- NAME -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label fw-bold">
+
+                            Name
+
+                        </label>
+
+                        <input type="text"
+                               name="name"
+                               value="${patient.name}"
+                               class="form-control"
+                               required>
+
+                    </div>
+
+                    <!-- EMAIL -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label fw-bold">
+
+                            Email
+
+                        </label>
+
+                        <input type="email"
+                               name="email"
+                               value="${patient.email}"
+                               class="form-control"
+                               required>
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <!-- AGE -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label fw-bold">
+
+                            Age
+
+                        </label>
+
+                        <input type="number"
+                               name="age"
+                               value="${patient.age}"
+                               class="form-control">
+
+                    </div>
+
+                    <!-- BLOOD TYPE -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label fw-bold">
+
+                            Blood Type
+
+                        </label>
+
+                        <select name="bloodType"
+                                class="form-select">
+
+                            <option value="A_POSITIVE"
+                                ${patient.bloodType == 'A_POSITIVE' ? 'selected' : ''}>
+                                A+
+                            </option>
+
+                            <option value="B_POSITIVE"
+                                ${patient.bloodType == 'B_POSITIVE' ? 'selected' : ''}>
+                                B+
+                            </option>
+
+                            <option value="O_POSITIVE"
+                                ${patient.bloodType == 'O_POSITIVE' ? 'selected' : ''}>
+                                O+
+                            </option>
+
+                            <option value="AB_POSITIVE"
+                                ${patient.bloodType == 'AB_POSITIVE' ? 'selected' : ''}>
+                                AB+
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <!-- REGISTERED DATE -->
+
+                <div class="mb-3">
+
+                    <label class="form-label fw-bold">
+
+                        Registered At
+
+                    </label>
+
+                    <input type="date"
+                           name="registeredAt"
+                           value="${patient.registeredAt}"
+                           class="form-control">
+
+                </div>
+
+                <!-- BUTTONS -->
+
+                <div class="text-center mt-4">
+
+                    <button type="submit"
+                            class="btn btn-success me-2">
+
+                        Update Details
+
+                    </button>
+
+                    <a href="${pageContext.request.contextPath}/patients"
+                       class="btn btn-primary me-2">
+
+                        Back
+
+                    </a>
+
+                    <a href="${pageContext.request.contextPath}/patients/delete/${patient.id}"
+                       class="btn btn-danger">
+
+                        Delete Patient
+
+                    </a>
+
+                </div>
+
+            </form>
 
         </div>
-
-        <div class="info-box">
-
-            <div class="label">
-                Email Address
-            </div>
-
-            <div class="value">
-                ${patient.email}
-            </div>
-
-        </div>
-
-        <div class="info-box">
-
-            <div class="label">
-                Blood Type
-            </div>
-
-            <div class="value">
-                ${patient.bloodType}
-            </div>
-
-     <div class="btn-container">
-
-         <a href="${pageContext.request.contextPath}/patients"
-            class="btn">
-
-             Back to Patients
-
-         </a>
-
-         <a href="${pageContext.request.contextPath}/"
-            class="btn home-btn">
-
-             Home Page
-
-         </a>
-
-     </div>
 
     </div>
 
 </div>
 
 </body>
+
 </html>

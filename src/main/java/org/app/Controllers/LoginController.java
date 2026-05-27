@@ -61,9 +61,16 @@ public class LoginController {
             return "redirect:/patient/dashboard";
         }
 
+        else if(user.getRole().equalsIgnoreCase("DOCTOR")){
+
+            return "redirect:/doctors/dashboard";
+        }
+
+        return  "redirect:/";
+
         // DEFAULT
 
-        return "redirect:/";
+
     }
     @GetMapping("/logout")
     public String logout(HttpSession session){

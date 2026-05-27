@@ -74,6 +74,14 @@ public class PatientController {
 
         return "patient-details";
     }
+    @PostMapping("/update")
+    public String updatePatient(
+            @ModelAttribute Patient patient){
+
+        patientService.savePatient(patient);
+
+        return "redirect:/patients/" + patient.getId();
+    }
 
     // DELETE PATIENT
     @GetMapping("/delete/{id}")

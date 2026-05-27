@@ -18,6 +18,7 @@ public class Appointment {
     private LocalTime appointmentTime;
 
     private String reason;
+
     @ManyToOne
     private Patient patient;
 

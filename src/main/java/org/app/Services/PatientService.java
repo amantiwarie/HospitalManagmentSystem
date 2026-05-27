@@ -45,9 +45,11 @@ public class PatientService {
         return patientRepository.findTop5ByOrderByIdDesc();
 
     }
-    public Patient findByEmail(String email){
+    public Patient getPatientByEmail(
+            String email){
 
-        return patientRepository.findByEmail(email);
+        return patientRepository
+                .findByEmail(email);
     }
 
     public Patient updatePatient(Long id, Patient updatedPatient) {

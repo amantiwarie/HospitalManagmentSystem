@@ -16,6 +16,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -124,5 +125,9 @@ public class MyConfig {
             EntityManagerFactory emf){
 
         return new JpaTransactionManager(emf);
+    }
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
