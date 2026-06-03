@@ -28,6 +28,8 @@ public class Patient {
 
     private BloodType bloodType;
 
+    private String imagePath;
+
     private LocalDate registeredAt;
 
     @OneToMany(
@@ -103,7 +105,10 @@ public class Patient {
 
         this.appointmentList = appointmentList;
     }
-
+    @PrePersist
+    public void prePersist() {
+        this.registeredAt = LocalDate.now();
+    }
 
     public List<Doctor> getDoctors() {
         return doctors;
@@ -119,5 +124,13 @@ public class Patient {
 
     public void setInsurance(Insurance insurance) {
         this.insurance = insurance;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }

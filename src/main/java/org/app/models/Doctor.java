@@ -19,6 +19,9 @@ public class Doctor {
     private int age;
     private String specialization;
 
+    private String imagePath;
+
+
 
 
     @ManyToOne
@@ -88,5 +91,13 @@ public class Doctor {
 
     public void setSpecialization(String specialization) {
         this.specialization = specialization;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    public String getImagePath() {
+        return imagePath;
     }
 }

@@ -28,9 +28,6 @@ public class Appointment {
     public Appointment(){
 
     }
-
-
-
     public void setId(long id) {
         this.id = id;
     }

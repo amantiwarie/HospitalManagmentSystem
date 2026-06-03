@@ -3,9 +3,15 @@ package org.app.Services;
 import org.app.Repositories.DoctorRepository;
 import org.app.models.Doctor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class DoctorService {
@@ -28,15 +34,26 @@ public class DoctorService {
     public void deleteDoctor(Long id){
         doctorRepository.deleteById(id);
     }
+    public Doctor updateDoctor(Long id, Doctor newDoctor) {
+        Doctor existing = doctorRepository.findById(id).orElse(null);
+        if (existing == null) return null;
+        existing.setName(newDoctor.getName());
+        existing.setEmail(newDoctor.getEmail());
+        existing.setAge(newDoctor.getAge());
+        existing.setDepartment(newDoctor.getDepartment());
+        return doctorRepository.save(existing);
+    }
 
-    public Doctor updateDoctor(Long id,Doctor newDoctor){
-        Doctor existingDoctor =doctorRepository.findById(id).orElse(null);
-
-        if(existingDoctor==null){
-            return null;
+    // SAVE IMAGE to disk, returns path stored in DB
+    public String saveImage(MultipartFile file, String subFolder) throws Exception {
+        File dir = new File(subFolder);
+        if (!dir.exists()) {
+            dir.mkdirs(); // auto-create folder
         }
-        existingDoctor.setEmail(newDoctor.getEmail());
-        return doctorRepository.save(existingDoctor);
+        String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
+        Path path = Paths.get(subFolder + filename);
+        Files.write(path, file.getBytes());
+        return subFolder + filename;
     }
     public Doctor getDoctorById(Long id){
 

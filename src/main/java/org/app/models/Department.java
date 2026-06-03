@@ -11,7 +11,7 @@ public class Department {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(nullable = false,unique = true)
     private String name;
@@ -26,11 +26,11 @@ public class Department {
 
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
