@@ -23,9 +23,12 @@ public class DepartmentController {
     @GetMapping
     public String getAllDepartments(HttpSession session, Model model) {
 
+        // FIX: session check — redirect to login if not logged in
         User user = (User) session.getAttribute("loggedInUser");
+        if (user == null) return "redirect:/login";
 
-        if (user == null) {
+        // FIX: role check — only ADMIN can access
+        if (!user.getRole().equalsIgnoreCase("ADMIN")) {
             return "redirect:/login";
         }
 

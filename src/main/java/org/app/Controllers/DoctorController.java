@@ -31,8 +31,14 @@ public class DoctorController {
 
     @GetMapping
     public String getAllDoctors(HttpSession session, Model model) {
+        // FIX: session check — redirect to login if not logged in
         User user = (User) session.getAttribute("loggedInUser");
         if (user == null) return "redirect:/login";
+
+        // FIX: role check — only ADMIN can access
+        if (!user.getRole().equalsIgnoreCase("ADMIN")) {
+            return "redirect:/login";
+        }
         model.addAttribute("doctors", doctorService.getAllDoctors());
         model.addAttribute("doctor", new Doctor());
         model.addAttribute("departments", departmentService.getAllDepartments());
